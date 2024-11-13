@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { TextGeometry } from '../myGeometries/components/geometries/TextGeometry';
-import { FontLoader } from '../myGeometries/components/loaders/FontLoader';
+import { TextGeometry } from '../myGeometries/myComponents/geometries/TextGeometry';
+import { FontLoader } from '../myGeometries/myComponents/loaders/FontLoader';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -18,6 +18,10 @@ let stars, starGeo;
 lighting();
 particles();
 textGeo();
+
+const particleColors = [ 0xffffff, 0xff0000, 0x0000ff ];
+let colorIndex = 0;
+let lastColorChange = 0;
 
 function particles() {
   const points = [];
@@ -53,16 +57,12 @@ function animateParticles() {
     }
   }
 
-const textColors = [ 0xffffff, 0xff0000, 0x0000ff ];
-let colorIndex = 0;
-let lastColorChange = 0;
-
 function textGeo() {
   const loader = new FontLoader();
   
-  loader.load( 'fonts/droid_serif_regular.typeface.json', 
+  loader.load( 'myFonts/droid_serif_regular.typeface.json', 
     function (font) {
-      const textGeometry = new TextGeometry( 'A.L. Schatz', {
+      const textGeometry = new TextGeometry( 'A.L.', {
         font: font,
         size: 10,
         height: 0.25
@@ -98,9 +98,9 @@ function animate() {
 
   const currentTime = performance.now();
   if (currentTime - lastColorChange > 3000) {
-    colorIndex = (colorIndex + 1) % textColors.length;
-    if (textMesh.material) {
-      textMesh.material.color.setHex( textColors[colorIndex] );
+    colorIndex = (colorIndex + 1) % particleColors.length;
+    if (stars.material) {
+      stars.material.color.setHex( particleColors[colorIndex] );
     }
     lastColorChange = currentTime;
   }
